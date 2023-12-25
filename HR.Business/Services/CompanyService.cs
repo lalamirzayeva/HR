@@ -9,7 +9,7 @@ namespace HR.Business.Services;
 public class CompanyService : ICompanyService
 {
 
-    public void Create(string name, string info)
+    public void Create(string? name, string? info)
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
         Company? dbCompany = 

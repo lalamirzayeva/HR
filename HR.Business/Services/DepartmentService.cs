@@ -24,7 +24,7 @@ public class DepartmentService : IDepartmentService
         dbDepartment.CurrentEmployeeCount++;
     }
 
-    public void Create(string name, string description, int employeeLimit, int companyId)
+    public void Create(string? name, string description, int employeeLimit, int companyId)
     {
 
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(); // aid oldugu company gore unique olmalidir
@@ -53,7 +53,7 @@ public class DepartmentService : IDepartmentService
             HrDbContext.Departments.Find(d => d.Id == departmentId);
         if (dbDepartment is null) 
             throw new NotFoundException($"Department with {departmentId} ID does not exist.");
-        return dbDepartment;
+        return dbDepartment; ;
     }
 
     public void GetDepartmentEmployees(int departmentId)
