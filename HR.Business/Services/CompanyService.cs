@@ -55,7 +55,7 @@ public class CompanyService : ICompanyService
             throw new NotFoundException($"A company with {companyName} name is not found.");
         dbCompany.IsActive = true;
     }
-    public Company FindCompanyById(int companyId)
+    public Company? FindCompanyById(int companyId)
     {
         if (companyId < 0) throw new ArgumentOutOfRangeException();
         return HrDbContext.Companies.Find(c => c.Id == companyId);

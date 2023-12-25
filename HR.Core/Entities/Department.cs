@@ -9,6 +9,9 @@ public class Department : IEntity
     public string Name { get; set; }
     public string Description { get; set; }
     public int EmployeeLimit { get; set; }
+    public int CurrentEmployeeCount { get; set; }
+    public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
     public Company CompanyId { get; set; }
     public Company Company { get; set; }  // bu mene lazimdir? axirda bax
 
@@ -20,5 +23,7 @@ public class Department : IEntity
         Description = description;
         EmployeeLimit = employeeLimit;
         CompanyId = companyId;
+        IsActive = true;
+        IsDeleted = false;
     }
 }

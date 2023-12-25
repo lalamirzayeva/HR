@@ -1,4 +1,6 @@
-﻿namespace HR.Business.Interfaces;
+﻿using HR.Core.Entities;
+
+namespace HR.Business.Interfaces;
 
 public interface ICompanyService
 {
@@ -6,5 +8,6 @@ public interface ICompanyService
     void GetAllDepartments(string companyName);
     void GetAllDepartmentsById(int companyId);
     void Active(string companyName);
+    Company? FindCompanyById (int companyId);
     void ShowAll();
 }

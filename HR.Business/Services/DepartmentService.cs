@@ -2,6 +2,8 @@
 using HR.Business.Utilities.Exceptions;
 using HR.Core.Entities;
 using HR.DataAccess.Contexts;
+using System.ComponentModel.Design;
+using System.Xml.Linq;
 
 namespace HR.Business.Services;
 
@@ -12,9 +14,14 @@ public class DepartmentService : IDepartmentService
     {
         companyService = new CompanyService();
     }
-    public void AddEmployee(Employee employee)
+    public void AddEmployee(Employee employee, int departmentId) 
     {
-        throw new NotImplementedException();
+        Department? dbDepartment = 
+            HrDbContext.Departments.Find(d => d.Id == departmentId);
+        if (dbDepartment is null) 
+            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        employee.DepartmentId = dbDepartment;
+        dbDepartment.CurrentEmployeeCount++;
     }
 
     public void Create(string name, string description, int employeeLimit, int companyId)
@@ -49,19 +56,46 @@ public class DepartmentService : IDepartmentService
         return dbDepartment;
     }
 
-    public void GetDepartmentEmployees(string departmentName)
+    public void GetDepartmentEmployees(int departmentId)
     {
-        throw new NotImplementedException();
+        foreach (var employee in HrDbContext.Employees)
+        {
+            if (employee.IsActive == true)
+            {
+                if (Equals(employee.DepartmentId, departmentId))
+                {
+                    Console.WriteLine($"Employee ID: {employee.Id}; " +
+                                      $"Employee name: {employee.Name}; " +
+                                      $"Employee surname: {employee.Surname}" +
+                                      $"Employee salary: {employee.Salary}");
+                }
+            }
+        }
     }
 
-    public void ShowDepartmentsInCompany(Company company)
+    public void ShowDepartmentsInCompany(int companyId)
     {
-        throw new NotImplementedException();
+        foreach(var department in HrDbContext.Departments)
+        {
+            if (department.Company.Id == companyId && department.IsActive == true)
+            {
+                Console.WriteLine($"Department ID: {department.Id}; Department Name: {department.Name}");
+            }
+        }
     }
-
-    public void UpdateDepartment(string newDepartmentName, int newEmployeeLimit)
+    
+    public void UpdateDepartment(int departmentId, string newDepartmentName, int newEmployeeLimit)
     {
-        throw new NotImplementedException();
+        if (departmentId < 0) throw new ArgumentOutOfRangeException();
+        Department? department = 
+            HrDbContext.Departments.Find(d => d.Id == departmentId);
+        if (department is null) 
+            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        else
+        {
+            department.Name = newDepartmentName;
+            department.EmployeeLimit = newEmployeeLimit;
+        }
     }
 
 }
