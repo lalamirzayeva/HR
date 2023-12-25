@@ -10,15 +10,18 @@ public class Employee : IEntity
     public string Surname { get; set; }
     public string Email { get; set; }
     public int Salary { get; set; }
+    public bool IsFired { get; set; }
+    public bool IsActive { get; set; }
     public Department DepartmentId { get; set; }
 
-    public Employee(string name, string surname, string email, int salary, Department departmentId)
+    public Employee(string name, string surname, string email, int salary) // department id silmisen
     {
         Id = _id++;
         Name = name;
         Surname = surname;
         Email = email;
         Salary = salary;
-        DepartmentId = departmentId;
+        IsFired = false;
+        IsActive = true;
     }
 }

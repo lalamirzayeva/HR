@@ -1,5 +1,7 @@
 ﻿using HR.Business.Interfaces;
+using HR.Business.Utilities.Exceptions;
 using HR.Core.Entities;
+using HR.DataAccess.Contexts;
 
 namespace HR.Business.Services;
 
@@ -15,15 +17,27 @@ public class EmployeeService : IEmployeeService
         throw new NotImplementedException();
     }
 
-    public void Create(string name, string surname, string email, int salary, int departmentId)
+    public void Create(string name, string surname, string email, int salary)
     {
         if (String.IsNullOrEmpty(name)) throw new ArgumentNullException();
-        //Department? department = departmentService.;
-
+        if (salary < 345) throw new MinWageException($"Minimum amount of salary shoul be 345 manats according to the legislation.");
+        Employee employee = new(name, surname, email, salary);
+        HrDbContext.Employees.Add(employee);
     }
 
     public void FireEmployee(int employeeId)
     {
-        throw new NotImplementedException();
+        if (employeeId < 0) throw new ArgumentOutOfRangeException();
+        Employee? employee = HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if (employee is null) throw new NotFoundException($"Student with {employeeId} ID is not found.");
+        employee.IsActive = false;
+    }
+
+    public void Active(int id)
+    {
+        if (id < 0) throw new ArgumentOutOfRangeException();
+        Employee? employee = HrDbContext.Employees.Find(e => e.Id == id);
+        if (employee is null) throw new NotFoundException($"Student with {id} ID is not found.");
+        employee.IsActive = true;
     }
 }

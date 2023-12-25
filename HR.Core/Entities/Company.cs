@@ -8,6 +8,7 @@ public class Company : IEntity
     private static int _id;
     public string Name { get; set; }
     public string Info { get; set; }
+    public bool IsActive { get; set; } = true;
     public Company(string name, string info)
     {
         Id = _id++;

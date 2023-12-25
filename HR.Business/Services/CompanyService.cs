@@ -46,12 +46,20 @@ public class CompanyService : ICompanyService
             }
         }
     }
-
-    public void Active(string companyId)
+    public void Active(string companyName)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
+        Company? dbCompany =
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
+        if (dbCompany is null)
+            throw new NotFoundException($"A company with {companyName} name is not found.");
+        dbCompany.IsActive = true;
     }
-
+    public Company FindCompanyById(int companyId)
+    {
+        if (companyId < 0) throw new ArgumentOutOfRangeException();
+        return HrDbContext.Companies.Find(c => c.Id == companyId);
+    }
     public void ShowAll()
     {
        foreach (var company in HrDbContext.Companies) 

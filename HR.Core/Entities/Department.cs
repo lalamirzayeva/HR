@@ -10,16 +10,15 @@ public class Department : IEntity
     public string Description { get; set; }
     public int EmployeeLimit { get; set; }
     public Company CompanyId { get; set; }
-    public Company Company { get; set; }
+    public Company Company { get; set; }  // bu mene lazimdir? axirda bax
 
 
-    public Department(string name, string description, int employeeLimit, Company companyId, Company company)
+    public Department(string name, string description, int employeeLimit, Company companyId)
     {
         Id = _id++;
         Name = name;
         Description = description;
         EmployeeLimit = employeeLimit;
         CompanyId = companyId;
-        Company = company;
     }
 }

@@ -7,6 +7,11 @@ namespace HR.Business.Services;
 
 public class DepartmentService : IDepartmentService
 {
+    private ICompanyService companyService { get; }
+    public DepartmentService()
+    {
+        companyService = new CompanyService();
+    }
     public void AddEmployee(Employee employee)
     {
         throw new NotImplementedException();
@@ -16,14 +21,21 @@ public class DepartmentService : IDepartmentService
     {
 
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(); // aid oldugu company gore unique olmalidir
-                                                                           //    Department? dbdDepartment = 
-                                                                           //        HrDbContext.Departments.Find(d => d.Name.ToLower() == name.ToLower());
-                                                                           //    if (dbCompany is not null)
-                                                                           //        throw new AlreadyExistException($"A company with the {name} name is already exist.");
-                                                                           //    if (name.Length < 2)
-                                                                           //        throw new CoNameException($"The company name should contain at least 3 letters.");
-                                                                           //    Company company = new Company(name, info);
-                                                                           //    HrDbContext.Companies.Add(company);                                                                   
+        foreach (var departments in HrDbContext.Departments)  // yuz faiz problem cixacaq console-da yoxla
+        {
+            if (departments.Company.Id == companyId)
+            {
+                if (Equals(name, departments))
+                {
+                    throw new AlreadyExistException($"A department with {name} name exist within the company with {companyId} ID.");
+                }
+            }
+        }
+        if (employeeLimit < 3) throw new MinNumEmployeeException($"Department should at least contain 3 employees.");
+        Company? company = companyService.FindCompanyById(companyId);
+        if (company is null) throw new NotFoundException($"Company with {companyId} does not exist.");
+        Department department = new(name, description, employeeLimit, company);
+        HrDbContext.Departments.Add(department);
     }
 
     public Department? GetDepartmentById(int departmentId)
