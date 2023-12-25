@@ -8,6 +8,7 @@ namespace HR.Business.Services;
 
 public class CompanyService : ICompanyService
 {
+
     public void Create(string name, string info)
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
@@ -33,5 +34,32 @@ public class CompanyService : ICompanyService
                 if (department.Company.Name.ToLower() == companyName.ToLower())
                     Console.WriteLine($"ID: {department.Id};  Department name:{department.Name}");
             }
+    }
+
+    public void GetAllDepartmentsById(int companyId)
+    {
+        foreach (var department in HrDbContext.Departments)
+        {
+            if (department.Company.Id == companyId)
+            {
+                Console.WriteLine($"ID:{department.Id}; Department name:{department.Name}");
+            }
+        }
+    }
+
+    public void Active(string companyId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowAll()
+    {
+       foreach (var company in HrDbContext.Companies) 
+       {
+            if (company.IsActive == true)
+            {
+                Console.WriteLine($"Company ID: {company.Id};  Company Name: {company.Name}");
+            }
+        }
     }
 }
