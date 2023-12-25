@@ -8,4 +8,6 @@ public interface IDepartmentService
     void AddEmployee(Employee employee);
     void UpdateDepartment(string newDepartmentName, int newEmployeeLimit);
     void GetDepartmentEmployees(string departmentName);
+    Department? GetDepartmentById(int departmentId);
+    void ShowDepartmentsInCompany (Company company);
 }

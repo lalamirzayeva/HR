@@ -2,6 +2,7 @@
 using HR.Business.Utilities.Exceptions;
 using HR.Core.Entities;
 using HR.DataAccess.Contexts;
+using System.Xml.Linq;
 
 namespace HR.Business.Services;
 
@@ -22,6 +23,15 @@ public class CompanyService : ICompanyService
 
     public void GetAllDepartments(string companyName)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
+        Company? dbCompany =
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
+        if (dbCompany is null)
+            throw new AlreadyExistException($"A company with {companyName} name does not exist.");
+        else foreach (var department in HrDbContext.Departments)
+            {
+                if (department.Company.Name.ToLower() == companyName.ToLower())
+                    Console.WriteLine($"ID: {department.Id};  Department name:{department.Name}");
+            }
     }
 }

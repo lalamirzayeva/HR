@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\Exceptions\" />
     <Folder Include="Utilities\Extensions\" />
     <Folder Include="Utilities\Helpers\" />
   </ItemGroup>

@@ -14,7 +14,15 @@ public class DepartmentService : IDepartmentService
 
     public void Create(string name, string description, int employeeLimit, int companyId)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(); // aid oldugu company gore unique olmalidir
+        Company? dbCompany =
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == name.ToLower());
+        if (dbCompany is not null)
+            throw new AlreadyExistException($"A company with the {name} name is already exist.");
+        if (name.Length < 2)
+            throw new CoNameException($"The company name should contain at least 3 letters.");
+        Company company = new Company(name, info);
+        HrDbContext.Companies.Add(company);
     }
 
     public Department? GetDepartmentById(int departmentId)
