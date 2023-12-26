@@ -98,18 +98,32 @@ public class DepartmentService : IDepartmentService
         }
     }
     
-    public void UpdateDepartment(int departmentId, string newDepartmentName, int newEmployeeLimit)
+    public void UpdateDepartment(int departmentId, string? newDepartmentName, int newEmployeeLimit)
     {
-        if (departmentId < 0) throw new ArgumentOutOfRangeException();
-        Department? department = 
-            HrDbContext.Departments.Find(d => d.Id == departmentId);
-        if (department is null) 
-            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        var dbDepartment = GetDepartmentById(departmentId);
+        if (string.IsNullOrEmpty(newDepartmentName)) throw new ArgumentNullException();
+        foreach (var departments in HrDbContext.Departments)  
+        {
+            if (departments.Company.Id == dbDepartment.Company.Id)
+            {
+                if (Equals(newDepartmentName, departments))
+                {
+                    throw new AlreadyExistException($"A department with {newDepartmentName} name exist within the company.");
+                }
+            }
+        }
+        if (newEmployeeLimit < dbDepartment.EmployeeLimit) 
+            throw new MinNumEmployeeException($"New employee limit should be higher than previous employee limit count in order to update department.");
         else
         {
-            department.Name = newDepartmentName;
-            department.EmployeeLimit = newEmployeeLimit;
+            dbDepartment.Name = newDepartmentName;
+            dbDepartment.EmployeeLimit = newEmployeeLimit;
         }
+        //if (departmentId < 0) throw new ArgumentOutOfRangeException();
+        //Department? department = 
+        //    HrDbContext.Departments.Find(d => d.Id == departmentId);
+        //if (department is null) 
+        //    throw new NotFoundException($"Department with {departmentId} ID is not found.");
     }
 
 }

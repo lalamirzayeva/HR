@@ -73,6 +73,7 @@ while (runApp)
                 case (int)MenuEnum.CreateDepartment:
                     try
                     {
+                        
                         Console.WriteLine("Enter department name:");
                         string? departmentName = Console.ReadLine();
                         Console.WriteLine("Enter description for the department:");
@@ -95,15 +96,10 @@ while (runApp)
                 case (int)MenuEnum.AddEmployee:
                     try
                     {
-                        Console.WriteLine("Enter department name:");
-                        string? departmentName = Console.ReadLine();
-                        Console.WriteLine("Enter description for the department:");
-                        string? departmentDesc = Console.ReadLine();
-                        Console.WriteLine("Enter max number of employees for the department:");
-                        int employeeLimit = Convert.ToInt32(Console.ReadLine());
-                        Console.WriteLine("Enter company ID to which this department will belong to:");
-                        int companyId = Convert.ToInt32(Console.ReadLine());
-                        //departmentService.AddEmployee(,)
+
+                        Console.WriteLine("Enter department's ID:");
+                        int departmentID = Convert.ToInt32(Console.ReadLine());
+                        //departmentService.AddEmployee(,);
 
                     }
                     catch (Exception ex)
@@ -120,6 +116,25 @@ while (runApp)
                         Console.WriteLine("Enter department ID:");
                         int departmentId = Convert.ToInt32(Console.ReadLine());
                         departmentService.GetDepartmentEmployees(departmentId);                     
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.ShowEmployeesOfDepartment;
+                    }
+                    break;
+                case (int)MenuEnum.UpdateDepartment:
+                    try
+                    {
+                        Console.WriteLine("Enter department ID you want to change:");
+                        int departmentId = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Set new name for the department:");
+                        string? newName = Console.ReadLine();
+                        Console.WriteLine("Set new employee limit for the department:");
+                        int newEmployeeLimit = Convert.ToInt32(Console.ReadLine());
+                        departmentService.UpdateDepartment(departmentId,newName,newEmployeeLimit);
                     }
                     catch (Exception ex)
                     {
