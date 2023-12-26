@@ -20,8 +20,17 @@ public class DepartmentService : IDepartmentService
             HrDbContext.Departments.Find(d => d.Id == departmentId);
         if (dbDepartment is null) 
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
-        employee.DepartmentId = dbDepartment;
-        dbDepartment.CurrentEmployeeCount++;
+        if (dbDepartment is not null)
+        {
+            if (dbDepartment.CurrentEmployeeCount >= dbDepartment.EmployeeLimit)
+                throw new CapacityLimitException($"Employee can not be add to this department as department is already full.\n" +
+                                                 $"Currently, the number of employees is: {dbDepartment.CurrentEmployeeCount}.");
+            if (dbDepartment.CurrentEmployeeCount < dbDepartment.EmployeeLimit)
+            {
+                employee.DepartmentId = dbDepartment;
+                dbDepartment.CurrentEmployeeCount++;
+            }
+        }
     }
 
     public void Create(string? name, string? description, int employeeLimit, int companyId)

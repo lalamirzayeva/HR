@@ -47,9 +47,9 @@ public class EmployeeService : IEmployeeService
         {
             if (employee.IsActive == true)
             {
-                Console.WriteLine($"Employee ID: {employee.Id}; " +
-                                  $"Name: {employee.Name}; " +
-                                  $"Surname: {employee.Surname}; " +
+                Console.WriteLine($"Employee ID: {employee.Id};\n" +
+                                  $"Name: {employee.Name};\n" +
+                                  $"Surname: {employee.Surname};\n" +
                                   $"Employee salary {employee.Salary}");
             }
         }
