@@ -22,7 +22,7 @@ public class CompanyService : ICompanyService
         HrDbContext.Companies.Add(company);
     }
 
-    public void GetAllDepartments(string companyName)
+    public void GetAllDepartments(string? companyName)
     {
         if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
         Company? dbCompany =

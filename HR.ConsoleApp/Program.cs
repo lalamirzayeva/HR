@@ -97,18 +97,49 @@ while (runApp)
                         int employeeLimit = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("Enter company ID to which this department will belong to:");
                         int companyId = Convert.ToInt32(Console.ReadLine());
-                        departmentService.AddEmployee(,)
+                        //departmentService.AddEmployee(,)
 
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        goto case (int)MenuEnum.CreateDepartment;
+                        goto case (int)MenuEnum.AddEmployee;
+                    }
+                    break;
+                case (int)MenuEnum.ShowEmployeesOfDepartment:
+                    try
+                    {
+                        Console.WriteLine("Enter department ID:");
+                        int departmentId = Convert.ToInt32(Console.ReadLine());
+                        departmentService.GetDepartmentEmployees(departmentId);                     
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        goto case (int)MenuEnum.ShowEmployeesOfDepartment;
+                    }
+                    break;
+                case (int)MenuEnum.CreateEmployee:
+                    try
+                    {
+                        Console.WriteLine("Enter employee's name:");
+                        string? employeeName = Console.ReadLine();
+                        Console.WriteLine("Enter employee's surname:");
+                        string? employeeSurname = Console.ReadLine();
+                        Console.WriteLine("Enter employee's email:");
+                        string? employeeMail = Console.ReadLine();
+                        Console.WriteLine("Enter employee's salary:");
+                        int employeeSalary = Convert.ToInt32(Console.ReadLine());
+                        employeeService.Create(employeeName,employeeSurname,employeeMail,employeeSalary);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        goto case (int)MenuEnum.CreateEmployee;
                     }
                     break;
 
-
-            }
+            }   
         }
     }
 

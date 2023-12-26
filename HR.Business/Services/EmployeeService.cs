@@ -17,7 +17,7 @@ public class EmployeeService : IEmployeeService
         throw new NotImplementedException();
     }
 
-    public void Create(string name, string surname, string email, int salary)
+    public void Create(string? name, string? surname, string? email, int salary)
     {
         if (String.IsNullOrEmpty(name)) throw new ArgumentNullException();
         if (salary < 345) throw new MinWageException($"Minimum amount of salary should be 345 manats according to the legislation.");

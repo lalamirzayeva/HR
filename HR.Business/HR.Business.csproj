@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Utilities\Extensions\" />
-    <Folder Include="Utilities\Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

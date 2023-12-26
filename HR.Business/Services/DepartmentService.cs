@@ -24,7 +24,7 @@ public class DepartmentService : IDepartmentService
         dbDepartment.CurrentEmployeeCount++;
     }
 
-    public void Create(string? name, string description, int employeeLimit, int companyId)
+    public void Create(string? name, string? description, int employeeLimit, int companyId)
     {
 
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(); // aid oldugu company gore unique olmalidir
@@ -53,16 +53,21 @@ public class DepartmentService : IDepartmentService
             HrDbContext.Departments.Find(d => d.Id == departmentId);
         if (dbDepartment is null) 
             throw new NotFoundException($"Department with {departmentId} ID does not exist.");
-        return dbDepartment; ;
+        return dbDepartment; 
     }
 
     public void GetDepartmentEmployees(int departmentId)
     {
-        foreach (var employee in HrDbContext.Employees)
+        if (departmentId < 0) throw new ArgumentOutOfRangeException();
+        var dbDepartmentId = 
+            HrDbContext.Departments.Find(d => d.Id == departmentId);
+        if (dbDepartmentId is null) 
+            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        if (dbDepartmentId is not null)
         {
-            if (employee.IsActive == true)
+            foreach (var employee in HrDbContext.Employees)
             {
-                if (Equals(employee.DepartmentId, departmentId))
+                if (employee.IsActive == true && Equals(dbDepartmentId,departmentId))
                 {
                     Console.WriteLine($"Employee ID: {employee.Id}; " +
                                       $"Employee name: {employee.Name}; " +
@@ -70,7 +75,7 @@ public class DepartmentService : IDepartmentService
                                       $"Employee salary: {employee.Salary}");
                 }
             }
-        }
+        }   
     }
 
     public void ShowDepartmentsInCompany(int companyId)
