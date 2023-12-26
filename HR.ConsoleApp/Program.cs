@@ -45,7 +45,9 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.CreateCompany;
                     }
                     break;
@@ -58,7 +60,9 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.ShowAllDepartmentsInCo;
                     }
                     break;
@@ -82,7 +86,9 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.CreateDepartment;
                     }
                     break;
@@ -102,7 +108,9 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.AddEmployee;
                     }
                     break;
@@ -115,7 +123,9 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.ShowEmployeesOfDepartment;
                     }
                     break;
@@ -134,13 +144,51 @@ while (runApp)
                     }
                     catch (Exception ex)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
+                        Console.ResetColor();
                         goto case (int)MenuEnum.CreateEmployee;
                     }
                     break;
-
+                case (int)MenuEnum.FireEmployee:
+                    try
+                    {
+                        Console.WriteLine("Enter ID of the employee you want to fire:");
+                        int employeeID = Convert.ToInt32(Console.ReadLine());
+                        employeeService.FireEmployee(employeeID);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.FireEmployee;
+                    }
+                    break;
+                case (int)MenuEnum.ShowAllEmployees:
+                    Console.WriteLine("All employees are listed below:");
+                    employeeService.ShowAll();
+                    break;
+                default:
+                    runApp = false;
+                    break;
             }   
         }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("Please, enter correct option number.");
+            Console.ResetColor();
+        }
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("Please, enter correct format to choose an option.");
+        Console.ResetColor();
     }
 
 }
+
+//Employee employee1 = new("Lala", "Mirzayeva", "lll@mailru", 10000);
+//Console.WriteLine(employee1);

@@ -12,6 +12,10 @@ public class Employee : IEntity
     public int Salary { get; set; }
     public bool IsFired { get; set; }
     public bool IsActive { get; set; }
+    public override string ToString()
+    {
+        return "Employee: "+ Id + " " + Name + " " + Surname; 
+    }
     public Department DepartmentId { get; set; }  // ishlemese int et
 
     public Employee(string? name, string? surname, string? email, int salary) // department id silmisen

@@ -14,6 +14,10 @@ public class Department : IEntity
     public bool IsDeleted { get; set; }
     public Company CompanyId { get; set; }
     public Company Company { get; set; }  // bu mene lazimdir? axirda bax
+    public override string ToString()
+    {
+        return "Department: " + Id + " " + Name;
+    }
 
 
     public Department(string name, string description, int employeeLimit, Company companyId)
