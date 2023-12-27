@@ -136,9 +136,9 @@ while (runApp)
                 case (int)MenuEnum.ShowEmployeesOfDepartment:
                     try
                     {
-                        Console.WriteLine("Enter department ID:");
-                        int departmentId = Convert.ToInt32(Console.ReadLine());
-                        departmentService.GetDepartmentEmployees(departmentId);                     
+                        Console.WriteLine("Enter department's name:");
+                        string? departmentName = Console.ReadLine();
+                        departmentService.GetDepartmentEmployees(departmentName);                     
                     }
                     catch (Exception ex)
                     {
@@ -164,7 +164,7 @@ while (runApp)
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
                         Console.ResetColor();
-                        goto case (int)MenuEnum.ShowEmployeesOfDepartment;
+                        goto case (int)MenuEnum.UpdateDepartment;
                     }
                     break;
                 case (int)MenuEnum.ShowAllDeps:
@@ -232,5 +232,3 @@ while (runApp)
 
 }
 
-//Employee employee1 = new("Lala", "Mirzayeva", "lll@mailru", 10000);
-//Console.WriteLine(employee1);

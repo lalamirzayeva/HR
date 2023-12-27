@@ -13,7 +13,6 @@ public class Department : IEntity
     public bool IsActive { get; set; }
     public bool IsDeleted { get; set; }
     public Company CompanyId { get; set; }
-    public Company Company { get; set; }  // bu mene lazimdir? axirda bax
     public override string ToString()
     {
         return "Department: " + Id + " " + Name;

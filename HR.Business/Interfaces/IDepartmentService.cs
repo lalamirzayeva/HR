@@ -7,8 +7,8 @@ public interface IDepartmentService
     void Create(string? name, string? description, int employeeLimit, int companyId);
     void AddEmployee(int employeeId, int departmentId);
     void UpdateDepartment(int departmentId, string newDepartmentName, int newEmployeeLimit);
-    void GetDepartmentEmployees(int departmentId);
+    void GetDepartmentEmployees(string? departmentName);
     Department? GetDepartmentById(int departmentId);
-    void ShowDepartmentsInCompany (int companyName);
+    //void ShowDepartmentsInCompany (int companyName);
     void ShowAllDepartments();
 }
