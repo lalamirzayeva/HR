@@ -4,6 +4,7 @@ public enum MenuEnum
 {
     CreateCompany = 1,
     ShowAllDepartmentsInCo,
+    DeleteCompany,
     ShowAllCompanies,
     CreateDepartment,
     AddEmployee,

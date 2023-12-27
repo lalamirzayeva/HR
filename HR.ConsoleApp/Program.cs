@@ -14,18 +14,18 @@ while (runApp)
     Console.WriteLine("Choose the option:");
     Console.WriteLine("1 - Create company\n" +
                       "2 - Show all departments of the company\n" +
-                      "3 - Show all companies\n" +
+                      "3 - Delete company from system\n" +
+                      "4 - Show all companies\n" +
                       "-----------------------------------------\n" +
-                      "4 - Create department\n" +
-                      "5 - Add employee to the department\n" +
-                      "6 - Show department's employees\n" +
-                      "7 - Configure department's name and employee limit\n" +
-                      "8 - Show all departments\n" +
-                      //"7 - Show all departments of the company\n" +
+                      "5 - Create department\n" +
+                      "6 - Add employee to the department\n" +
+                      "7 - Show department's employees\n" +
+                      "8 - Configure department's name and employee limit\n" +
+                      "9 - Show all departments\n" +
                       "-----------------------------------------\n" +
-                      "9 - Create employee\n" +
-                      "10 - Fire employee\n" +
-                      "11 - Show all employees in the system\n" +
+                      "10 - Create employee\n" +
+                      "11 - Fire employee\n" +
+                      "12 - Show all employees in the system\n" +
                       "-----------------------------------------\n" +
                       "0 - Exit");
     string? option = Console.ReadLine();
@@ -33,7 +33,7 @@ while (runApp)
     bool isInt = int.TryParse(option, out optionNumber);
     if (isInt)
     {
-        if (optionNumber >= 0 && optionNumber <= 11)
+        if (optionNumber >= 0 && optionNumber <= 12)
         {
             switch (optionNumber) 
             {
@@ -67,6 +67,21 @@ while (runApp)
                         Console.WriteLine(ex.Message);
                         Console.ResetColor();
                         goto case (int)MenuEnum.ShowAllDepartmentsInCo;
+                    }
+                    break;
+                case (int)MenuEnum.DeleteCompany:
+                    try
+                    {
+                        Console.WriteLine("Enter company's name:");
+                        string? companyName = Console.ReadLine();
+                        companyService.Delete(companyName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.DeleteCompany;
                     }
                     break;
                 case (int)MenuEnum.ShowAllCompanies:

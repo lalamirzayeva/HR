@@ -7,8 +7,7 @@ using System.Xml.Linq;
 namespace HR.Business.Services;
 
 public class CompanyService : ICompanyService
-{
-
+{ 
     public void Create(string? name, string? info)
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
@@ -60,8 +59,14 @@ public class CompanyService : ICompanyService
     }
     public Company? FindCompanyById(int companyId)
     {
-        if (companyId < 0) throw new ArgumentOutOfRangeException();
-        return HrDbContext.Companies.Find(c => c.Id == companyId);
+        foreach (var companies in HrDbContext.Companies)
+        {
+            if (companies.IsActive == true)
+            { 
+                return HrDbContext.Companies.Find(c => c.Id == companyId); 
+            }
+        }
+        return null;
     }
     public void ShowAll()
     {
@@ -84,5 +89,23 @@ public class CompanyService : ICompanyService
             }           
         }
         return false;
+    }
+
+    public void Delete(string? companyName)
+    {
+        if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
+        Company? dbCompany =
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
+        if (dbCompany is null)
+            throw new NotFoundException($"A company with {companyName} name is not found.");
+        if (dbCompany is not null)
+        {
+            foreach (var department in HrDbContext.Departments)
+            {
+                if (department.IsActive == true && department.CompanyId.Name.ToLower() == companyName.ToLower())
+                    throw new NotAllowedDeleteException($"This company cannot be deleted as it contains departments.");
+            }
+        }
+        dbCompany.IsActive = false;
     }
 }

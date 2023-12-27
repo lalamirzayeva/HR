@@ -115,4 +115,16 @@ public class DepartmentService : IDepartmentService
             }
         }
     }
+
+    //public bool CheckExistenceInCompany(string companyName)
+    //{
+    //    foreach (var department in HrDbContext.Departments)
+    //    {
+    //        if (department.IsActive == true && department.CompanyId.Name.ToLower() == companyName.ToLower())
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 }

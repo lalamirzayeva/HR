@@ -9,6 +9,5 @@ public interface IDepartmentService
     void UpdateDepartment(int departmentId, string newDepartmentName, int newEmployeeLimit);
     void GetDepartmentEmployees(string? departmentName);
     Department? GetDepartmentById(int departmentId);
-    //void ShowDepartmentsInCompany (int companyName);
     void ShowAllDepartments();
 }
