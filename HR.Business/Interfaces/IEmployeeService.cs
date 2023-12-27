@@ -7,4 +7,5 @@ public interface IEmployeeService
     void FireEmployee(int employeeId);
     void ChangeDepartment(int employeeId, int newDepartmentId);
     void ShowAll();
+    bool CheckExistence();
 }

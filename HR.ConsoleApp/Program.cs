@@ -33,7 +33,7 @@ while (runApp)
     bool isInt = int.TryParse(option, out optionNumber);
     if (isInt)
     {
-        if (optionNumber >= 0 && optionNumber <= 10)
+        if (optionNumber >= 0 && optionNumber <= 11)
         {
             switch (optionNumber) 
             {
@@ -108,11 +108,22 @@ while (runApp)
                 case (int)MenuEnum.AddEmployee:
                     try
                     {
-
-                        Console.WriteLine("Enter department's ID:");
-                        int departmentID = Convert.ToInt32(Console.ReadLine());
-                        //departmentService.AddEmployee(,);
-
+                        var check = employeeService.CheckExistence();
+                        if (check is true)
+                        {
+                            Console.WriteLine("Enter employee's ID:");
+                            int employeeID = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Enter department's ID:");
+                            int departmentID = Convert.ToInt32(Console.ReadLine());
+                            departmentService.AddEmployee(employeeID, departmentID);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("No employee is found to add any department. Add employee to the system.");
+                            Console.ResetColor();
+                            goto case(int)MenuEnum.CreateEmployee;
+                        }            
                     }
                     catch (Exception ex)
                     {

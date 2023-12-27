@@ -14,23 +14,22 @@ public class DepartmentService : IDepartmentService
     {
         companyService = new CompanyService();
     }
-    public void AddEmployee(Employee employee, int departmentId) 
+    public void AddEmployee(int employeeId, int departmentId) 
     {
+        Employee? employee = 
+            HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if (employee is null) 
+            throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         Department? dbDepartment = 
             HrDbContext.Departments.Find(d => d.Id == departmentId);
         if (dbDepartment is null) 
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
-        if (dbDepartment is not null)
-        {
-            if (dbDepartment.CurrentEmployeeCount >= dbDepartment.EmployeeLimit)
-                throw new CapacityLimitException($"Employee can not be add to this department as department is already full.\n" +
+
+        if (dbDepartment is not null && dbDepartment.CurrentEmployeeCount >= dbDepartment.EmployeeLimit)
+            throw new CapacityLimitException($"Employee can not be add to this department as department is already full.\n" +
                                                  $"Currently, the number of employees is: {dbDepartment.CurrentEmployeeCount}.");
-            if (dbDepartment.CurrentEmployeeCount < dbDepartment.EmployeeLimit)
-            {
-                employee.DepartmentId = dbDepartment;
-                dbDepartment.CurrentEmployeeCount++;
-            }
-        }
+       employee.DepartmentId = dbDepartment;
+       dbDepartment.CurrentEmployeeCount++;        
     }
 
     public void Create(string? name, string? description, int employeeLimit, int companyId)
@@ -54,7 +53,7 @@ public class DepartmentService : IDepartmentService
     public Department? GetDepartmentById(int departmentId)
     {
         if (departmentId < 0) 
-            throw new ArgumentOutOfRangeException();  // show alldan sonra sechim verer menuda
+            throw new ArgumentOutOfRangeException(); 
         Department? dbDepartment = 
             HrDbContext.Departments.Find(d => d.Id == departmentId);
         if (dbDepartment is null) 
@@ -64,21 +63,23 @@ public class DepartmentService : IDepartmentService
 
     public void GetDepartmentEmployees(int departmentId)
     {
-        if (departmentId < 0) throw new ArgumentOutOfRangeException();
-        var dbDepartmentId = 
+        Department? dbDepartment = 
             HrDbContext.Departments.Find(d => d.Id == departmentId);
-        if (dbDepartmentId is null) 
+        if (dbDepartment is null) 
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
-        if (dbDepartmentId is not null)
+        if (dbDepartment is not null)
         {
             foreach (var employee in HrDbContext.Employees)
             {
-                if (employee.IsActive == true && Equals(dbDepartmentId,departmentId))
+                if (employee.IsActive == true && dbDepartment.Id == departmentId)
                 {
-                    Console.WriteLine($"Employee ID: {employee.Id}; " +
-                                      $"Employee name: {employee.Name}; " +
-                                      $"Employee surname: {employee.Surname}" +
-                                      $"Employee salary: {employee.Salary}");
+                    Console.WriteLine($"Employee ID: {employee.Id};\n" +
+                                      $"Employee name: {employee.Name};\n" +
+                                      $"Employee surname: {employee.Surname}\n" +
+                                      $"Employee salary: {employee.Salary}\n" +
+                                      $"Department name: {employee.DepartmentId.Name}\n" +
+                                      $"Company name: {employee.DepartmentId.CompanyId.Name}\n" +
+                                      $"----------------------------------------");
                 }
             }
         }   
