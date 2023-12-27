@@ -10,4 +10,5 @@ public interface IDepartmentService
     void GetDepartmentEmployees(int departmentId);
     Department? GetDepartmentById(int departmentId);
     void ShowDepartmentsInCompany (int companyName);
+    void ShowAllDepartments();
 }

@@ -19,11 +19,14 @@ while (runApp)
                       "4 - Create department\n" +
                       "5 - Add employee to the department\n" +
                       "6 - Show department's employees\n" +
+                      "7 - Configure department's name and employee limit\n" +
+                      "8 - Show all departments\n" +
                       //"7 - Show all departments of the company\n" +
                       "-----------------------------------------\n" +
-                      "7 - Create employee\n" +
-                      "8 - Fire employee\n" +
-                      "9 - Show all employees in the system\n" +
+                      "9 - Create employee\n" +
+                      "10 - Fire employee\n" +
+                      "11 - Show all employees in the system\n" +
+                      "-----------------------------------------\n" +
                       "0 - Exit");
     string? option = Console.ReadLine();
     int optionNumber;
@@ -54,7 +57,7 @@ while (runApp)
                 case (int)MenuEnum.ShowAllDepartmentsInCo:
                     try
                     {
-                        Console.WriteLine("Enter company:");
+                        Console.WriteLine("Enter company's name:");
                         string? companyName = Console.ReadLine();
                         companyService.GetAllDepartments(companyName);
                     }
@@ -73,17 +76,26 @@ while (runApp)
                 case (int)MenuEnum.CreateDepartment:
                     try
                     {
-                        
-                        Console.WriteLine("Enter department name:");
-                        string? departmentName = Console.ReadLine();
-                        Console.WriteLine("Enter description for the department:");
-                        string? departmentDesc = Console.ReadLine();
-                        Console.WriteLine("Enter max number of employees for the department:");
-                        int employeeLimit = Convert.ToInt32(Console.ReadLine());
-                        Console.WriteLine("Enter company ID to which this department will belong to:");
-                        int companyId = Convert.ToInt32(Console.ReadLine());
-                        departmentService.Create(departmentName,departmentDesc,employeeLimit,companyId);
-
+                        var check = companyService.CheckExistence();
+                        if (check is true) 
+                        {
+                            Console.WriteLine("Enter department name:");
+                            string? departmentName = Console.ReadLine();
+                            Console.WriteLine("Enter description for the department:");
+                            string? departmentDesc = Console.ReadLine();
+                            Console.WriteLine("Enter max number of employees for the department:");
+                            int employeeLimit = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Enter company ID to which this department will belong to:");
+                            int companyId = Convert.ToInt32(Console.ReadLine());
+                            departmentService.Create(departmentName, departmentDesc, employeeLimit, companyId);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("Firstly, create a company.");
+                            Console.ResetColor();
+                            goto case (int)MenuEnum.CreateCompany;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -143,6 +155,10 @@ while (runApp)
                         Console.ResetColor();
                         goto case (int)MenuEnum.ShowEmployeesOfDepartment;
                     }
+                    break;
+                case (int)MenuEnum.ShowAllDeps:
+                    Console.WriteLine("All departments listed below:");
+                    departmentService.ShowAllDepartments();
                     break;
                 case (int)MenuEnum.CreateEmployee:
                     try

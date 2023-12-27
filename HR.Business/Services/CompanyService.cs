@@ -25,22 +25,25 @@ public class CompanyService : ICompanyService
     public void GetAllDepartments(string? companyName)
     {
         if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
-        Company? dbCompany =
+        var dbCompany =
             HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
         if (dbCompany is null)
             throw new AlreadyExistException($"A company with {companyName} name does not exist.");
-        else foreach (var department in HrDbContext.Departments)
+        if (dbCompany is not null)
+        {
+            foreach (var department in HrDbContext.Departments)
             {
-                if (department.Company.Name.ToLower() == companyName.ToLower())
-                    Console.WriteLine($"ID: {department.Id};  Department name:{department.Name}");
+                if (department.CompanyId.Name.ToLower() == companyName.ToLower())
+                    Console.WriteLine($"ID: {department.Id};  Department name: {department.Name}");
             }
+        }
     }
 
     public void GetAllDepartmentsById(int companyId)
     {
         foreach (var department in HrDbContext.Departments)
         {
-            if (department.Company.Id == companyId)
+            if (department.CompanyId.Id == companyId)
             {
                 Console.WriteLine($"ID:{department.Id}; Department name:{department.Name}");
             }
@@ -69,5 +72,17 @@ public class CompanyService : ICompanyService
                 Console.WriteLine($"Company ID: {company.Id};  Company Name: {company.Name}");
             }
         }
+    }
+
+    public bool CheckExistence()
+    {
+        foreach (var company in HrDbContext.Companies)
+        {
+            if (company.IsActive == true)
+            {
+                return true;
+            }           
+        }
+        return false;
     }
 }

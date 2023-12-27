@@ -8,6 +8,7 @@ public interface ICompanyService
     void GetAllDepartments(string? companyName);
     void GetAllDepartmentsById(int companyId);
     void Active(string companyName);
+    bool CheckExistence();
     Company? FindCompanyById (int companyId);
     void ShowAll();
 }

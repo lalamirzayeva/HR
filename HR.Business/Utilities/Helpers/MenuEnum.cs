@@ -9,6 +9,7 @@ public enum MenuEnum
     AddEmployee,
     ShowEmployeesOfDepartment,
     UpdateDepartment,
+    ShowAllDeps,
     CreateEmployee,
     FireEmployee,
     ShowAllEmployees

@@ -35,21 +35,18 @@ public class DepartmentService : IDepartmentService
 
     public void Create(string? name, string? description, int employeeLimit, int companyId)
     {
-
-        if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(); // aid oldugu company gore unique olmalidir
-        foreach (var departments in HrDbContext.Departments)  // yuz faiz problem cixacaq console-da yoxla
-        {
-            if (departments.Company.Id == companyId)
-            {
-                if (Equals(name, departments))
-                {
-                    throw new AlreadyExistException($"A department with {name} name exist within the company with {companyId} ID.");
-                }
-            }
-        }
+        if (String.IsNullOrEmpty(name)) throw new ArgumentNullException();
         if (employeeLimit < 3) throw new MinNumEmployeeException($"Department should at least contain 3 employees.");
         Company? company = companyService.FindCompanyById(companyId);
-        if (company is null) throw new NotFoundException($"Company with {companyId} does not exist.");
+        if (company is null) throw new NotFoundException($"Company with {companyId} ID does not exist.");
+        if (company is not null)
+        {
+            foreach (var departments in HrDbContext.Departments)
+            {
+                if (departments.CompanyId.Id == companyId && name.ToLower() == departments.Name.ToLower()) 
+                    throw new AlreadyExistException($"A department with {name} name exist within the company with {companyId} ID.");
+            }
+        }
         Department department = new(name, description, employeeLimit, company);
         HrDbContext.Departments.Add(department);
     }
@@ -100,30 +97,35 @@ public class DepartmentService : IDepartmentService
     
     public void UpdateDepartment(int departmentId, string? newDepartmentName, int newEmployeeLimit)
     {
-        var dbDepartment = GetDepartmentById(departmentId);
-        if (string.IsNullOrEmpty(newDepartmentName)) throw new ArgumentNullException();
-        foreach (var departments in HrDbContext.Departments)  
+        if (String.IsNullOrEmpty(newDepartmentName)) throw new ArgumentNullException();
+        Department? dbDepartment = GetDepartmentById(departmentId);
+        if (dbDepartment is null) throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        if (dbDepartment is not null) 
         {
-            if (departments.Company.Id == dbDepartment.Company.Id)
+            foreach (var departments in HrDbContext.Departments)
             {
-                if (Equals(newDepartmentName, departments))
-                {
+                if (departments.CompanyId.Id == dbDepartment.CompanyId.Id && newDepartmentName.ToLower() == departments.Name.ToLower())
                     throw new AlreadyExistException($"A department with {newDepartmentName} name exist within the company.");
-                }
             }
         }
-        if (newEmployeeLimit < dbDepartment.EmployeeLimit) 
-            throw new MinNumEmployeeException($"New employee limit should be higher than previous employee limit count in order to update department.");
-        else
-        {
-            dbDepartment.Name = newDepartmentName;
-            dbDepartment.EmployeeLimit = newEmployeeLimit;
-        }
-        //if (departmentId < 0) throw new ArgumentOutOfRangeException();
-        //Department? department = 
-        //    HrDbContext.Departments.Find(d => d.Id == departmentId);
-        //if (department is null) 
-        //    throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        if (newEmployeeLimit <= dbDepartment.CurrentEmployeeCount) 
+            throw new MinNumEmployeeException($"New employee limit should be higher than current number of employees in order to update department.");
+        dbDepartment.Name = newDepartmentName;
+        dbDepartment.EmployeeLimit = newEmployeeLimit;
+    
     }
 
+    public void ShowAllDepartments()
+    {
+        foreach (var department in HrDbContext.Departments)
+        {
+            if (department.IsActive == true)
+            {
+                Console.WriteLine($"ID: {department.Id}; " +
+                                  $"Name: {department.Name}; " +
+                                  $"Company ID: {department.CompanyId.Id}; " +
+                                  $"Company Name: {department.CompanyId.Name} ");
+            }
+        }
+    }
 }
