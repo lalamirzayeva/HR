@@ -13,6 +13,9 @@ public enum MenuEnum
     DeleteDepartment,
     ShowAllDeps,
     CreateEmployee,
+    UpgradeEmployee,
+    DowngradeEmployee,
+    ChangeEmployeeDepartment,
     FireEmployee,
     ShowAllEmployees
 }

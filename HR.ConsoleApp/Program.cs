@@ -32,8 +32,11 @@ while (runApp)
                       "10 - Show all departments\n" +
                       "-----------------------------------------\n" +
                       "11 - Create employee\n" +
-                      "12 - Fire employee\n" +
-                      "13 - Show all employees in the system\n" +
+                      "12 - Upgrade employee\n" +
+                      "13 - Downgrade employee\n" +
+                      "14 - Change employee's department\n" +
+                      "15 - Fire employee\n" +
+                      "16 - Show all employees in the system\n" +
                       "-----------------------------------------\n" +
                       "0 - Exit");
     Console.ResetColor();
@@ -42,7 +45,7 @@ while (runApp)
     bool isInt = int.TryParse(option, out optionNumber);
     if (isInt)
     {
-        if (optionNumber >= 0 && optionNumber <= 13)
+        if (optionNumber >= 0 && optionNumber <= 16)
         {
             switch (optionNumber) 
             {
@@ -391,6 +394,113 @@ while (runApp)
                         Console.WriteLine(ex.Message);
                         Console.ResetColor();
                         goto case (int)MenuEnum.CreateEmployee;
+                    }
+                    break;
+                case (int)MenuEnum.UpgradeEmployee:
+                    try
+                    {
+                        var checkEmpUp = employeeService.CheckExistence();
+                        if (checkEmpUp is true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter ID of the employee you want to upgrade:");
+                            Console.ResetColor();
+                            int employeeID = Convert.ToInt32(Console.ReadLine());
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter new salary amount:");
+                            Console.ResetColor();
+                            int newSalaryAmount = Convert.ToInt32(Console.ReadLine());
+                            employeeService.UpgradeEmployee(employeeID,newSalaryAmount);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("No employee is found in the system to upgrade. Firstly, create an employee.");
+                            Console.ResetColor();
+                            goto case (int)MenuEnum.CreateEmployee;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.UpgradeEmployee;
+                    }
+                    break;
+                case (int)MenuEnum.DowngradeEmployee:
+                    try
+                    {
+                        var checkEmpDown = employeeService.CheckExistence();
+                        if (checkEmpDown is true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter ID of the employee you want to downgrade:");
+                            Console.ResetColor();
+                            int employeeID = Convert.ToInt32(Console.ReadLine());
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter new salary amount:");
+                            Console.ResetColor();
+                            int newSalaryAmount = Convert.ToInt32(Console.ReadLine());
+                            employeeService.DowngradeEmployee(employeeID, newSalaryAmount);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("No employee is found in the system to downgrade. Firstly, create an employee.");
+                            Console.ResetColor();
+                            goto case (int)MenuEnum.CreateEmployee;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.DowngradeEmployee;
+                    }
+                    break;
+                case (int)MenuEnum.ChangeEmployeeDepartment:
+                    try
+                    {
+                        var checkChangeDep = departmentService.CheckExistence();
+                        if (checkChangeDep is true)
+                        {
+                            var checkChange = employeeService.CheckExistence();
+                            if (checkChange is true)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine("Enter employee ID:");
+                                Console.ResetColor();
+                                int employeeId = Convert.ToInt32(Console.ReadLine());
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine("Enter new department's ID to transfer employee:");
+                                Console.ResetColor();
+                                int newDepartmentId = Convert.ToInt32(Console.ReadLine());
+                                employeeService.ChangeDepartment(employeeId, newDepartmentId);
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("No employee is found in the system to transfer. Firstly, create an employee.");
+                                Console.ResetColor();
+                                goto case (int)MenuEnum.CreateEmployee;
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("No department is found in the system for transfering. Create department.");
+                            Console.ResetColor();
+                            goto case (int)MenuEnum.CreateDepartment;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.ChangeEmployeeDepartment;
                     }
                     break;
                 case (int)MenuEnum.FireEmployee:

@@ -77,10 +77,6 @@ public class DepartmentService : IDepartmentService
                                       $"Company name: {employee.DepartmentId.CompanyId.Name}\n" +
                                       $"----------------------------------------");
                 }
-                else
-                {
-                    throw new NotFoundException($"No employee is found in {departmentName} department.");
-                }
             }
         }
     }

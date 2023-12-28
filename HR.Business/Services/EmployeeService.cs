@@ -31,6 +31,11 @@ public class EmployeeService : IEmployeeService
     {
         Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeId);
         if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        Department? dbDepartment = HrDbContext.Departments.Find(d => d.Id == newDepartmentId);
+        if (dbDepartment is null) throw new NotFoundException($"Department with {newDepartmentId} ID is not found.");
+        dbEmployee.DepartmentId.CurrentEmployeeCount--;
+        dbEmployee.DepartmentId = dbDepartment;
+        dbDepartment.CurrentEmployeeCount++;
         
     }
 
