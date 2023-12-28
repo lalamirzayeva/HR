@@ -403,7 +403,11 @@ while (runApp)
                             Console.WriteLine("Enter ID of the employee you want to fire:");
                             Console.ResetColor();
                             int employeeID = Convert.ToInt32(Console.ReadLine());
-                            employeeService.FireEmployee(employeeID);
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter ID of the department this employee works:");
+                            Console.ResetColor();
+                            int departmentId = Convert.ToInt32(Console.ReadLine());
+                            departmentService.FireEmployee(employeeID,departmentId);
                         }
                         else
                         {

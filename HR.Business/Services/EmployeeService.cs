@@ -21,13 +21,6 @@ public class EmployeeService : IEmployeeService
         HrDbContext.Employees.Add(employee);
     }
 
-    public void FireEmployee(int employeeId)
-    {
-        Employee? employee = HrDbContext.Employees.Find(e => e.Id == employeeId);
-        if (employee is null) throw new NotFoundException($"Employee with {employeeId} ID is not found.");
-        employee.IsActive = false;
-    }
-
     public void Active(int id)
     {
         Employee? employee = HrDbContext.Employees.Find(e => e.Id == id);
@@ -40,7 +33,6 @@ public class EmployeeService : IEmployeeService
         if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         
     }
-
 
     public void ShowAll()
     {
@@ -56,7 +48,6 @@ public class EmployeeService : IEmployeeService
             }
         }
     }
-
     public bool CheckExistence()
     {
         foreach (var employee in HrDbContext.Employees)
@@ -67,5 +58,29 @@ public class EmployeeService : IEmployeeService
             }
         }
         return false;
+    }
+
+    public void UpgradeEmployee(int employeeId, int newSalaryAmount)
+    {
+        Employee? employee = 
+            HrDbContext.Employees.Find(e =>e.Id == employeeId);
+        if (employee is null) 
+            throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        if (newSalaryAmount <= employee.Salary) 
+            throw new UpgradeNotAllowed("New salary amount can not be less than previous salary amount in order to upgrade employee's salary.");
+        employee.Salary = newSalaryAmount;
+    }
+
+    public void DowngradeEmployee(int employeeId, int newSalaryAmount)
+    {
+        Employee? employee =
+            HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if (employee is null)
+            throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        if (newSalaryAmount >= employee.Salary)
+            throw new UpgradeNotAllowed("New salary amount can not be higher than previous salary amount in order to downgrade employee's salary.");
+        if (newSalaryAmount < 345)
+            throw new MinWageException($"Salary amount can not be less than 345 manat according to the legislation.");
+        employee.Salary = newSalaryAmount;
     }
 }

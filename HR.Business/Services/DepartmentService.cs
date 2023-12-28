@@ -148,4 +148,32 @@ public class DepartmentService : IDepartmentService
         }
         return false;
     }
+
+    public void FireEmployee(int employeeId, int departmentId)
+    {
+        Employee? dbEmployee = 
+            HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if(dbEmployee is null) 
+            throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        Department? dbDepartment =
+            HrDbContext.Departments.Find(d => d.Id == departmentId);
+        if (dbDepartment is null)
+            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        if (dbEmployee is not null && dbDepartment is not null)
+        {
+            if(dbEmployee.IsActive == true && dbDepartment.IsActive == true)
+            {
+                if (dbEmployee.DepartmentId.Id == departmentId)
+                {
+                    dbEmployee.IsActive = false;
+                    dbDepartment.CurrentEmployeeCount--;
+                }
+                else
+                {
+                    Console.WriteLine($"Employee with {employeeId} is not found within department.");
+                }
+            }
+            
+        }
+    }
 }
