@@ -116,15 +116,32 @@ public class DepartmentService : IDepartmentService
         }
     }
 
-    //public bool CheckExistenceInCompany(string companyName)
-    //{
-    //    foreach (var department in HrDbContext.Departments)
-    //    {
-    //        if (department.IsActive == true && department.CompanyId.Name.ToLower() == companyName.ToLower())
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
+    public void DeleteDepartment(int departmentId)
+    {
+        Department? dbDepartment = 
+            HrDbContext.Departments.Find(d => d.Id == departmentId);
+        if (dbDepartment is null) 
+            throw new NotFoundException($"Department with {departmentId} ID is not found.");
+        if (dbDepartment is not null)
+        {
+            foreach (var employees in HrDbContext.Employees)
+            {
+                if (employees.IsActive == true && employees.DepartmentId.Id == departmentId)
+                    throw new NotAllowedDeleteException($"Department with {departmentId} ID can not be deleted as it contains employees.");
+            }
+        }
+        dbDepartment.IsActive = false;
+    }
+
+    public bool CheckExistence()
+    {
+        foreach (var department in HrDbContext.Departments)
+        {
+            if (department.IsActive == true)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

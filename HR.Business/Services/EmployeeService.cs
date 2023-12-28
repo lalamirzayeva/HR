@@ -36,7 +36,9 @@ public class EmployeeService : IEmployeeService
     }
     public void ChangeDepartment(int employeeId, int newDepartmentId)
     {
-        throw new NotImplementedException();
+        Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        
     }
 
 

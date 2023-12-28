@@ -57,7 +57,7 @@ public class CompanyService : ICompanyService
             throw new NotFoundException($"A company with {companyName} name is not found.");
         dbCompany.IsActive = true;
     }
-    public Company? FindCompanyById(int companyId)
+    public Company? FindCompanyById(int companyId)   //burda eledi ki, shirket silinse de ora dep add edilir
     {
         foreach (var companies in HrDbContext.Companies)
         {
