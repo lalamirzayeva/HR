@@ -11,6 +11,7 @@ Console.ResetColor();
 CompanyService companyService = new();
 DepartmentService departmentService = new();
 EmployeeService employeeService = new();
+AdminService adminService = new();
 bool runApp = true;
 while (runApp)
 {
@@ -38,6 +39,9 @@ while (runApp)
                       "15 - Fire employee\n" +
                       "16 - Show all employees in the system\n" +
                       "-----------------------------------------\n" +
+                      "17 - Create HR admin profile\n" +
+                      "18 - Enter canteen\n" +
+                      "-----------------------------------------\n" +
                       "0 - Exit");
     Console.ResetColor();
     string? option = Console.ReadLine();
@@ -45,7 +49,7 @@ while (runApp)
     bool isInt = int.TryParse(option, out optionNumber);
     if (isInt)
     {
-        if (optionNumber >= 0 && optionNumber <= 16)
+        if (optionNumber >= 0 && optionNumber <= 18)
         {
             switch (optionNumber) 
             {
@@ -552,6 +556,27 @@ while (runApp)
                         Console.WriteLine("No employee is found in the system to show.");
                         Console.ResetColor();
                         goto Start;
+                    }
+                    break;
+                case (int)MenuEnum.CreateAdminProfile:
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("Set username:");
+                        Console.ResetColor();
+                        string? username = Console.ReadLine();
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("Set new password:");
+                        Console.ResetColor();
+                        string? password = Console.ReadLine();
+                        adminService.Create(username,password);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto case (int)MenuEnum.CreateCompany;
                     }
                     break;
                 default:

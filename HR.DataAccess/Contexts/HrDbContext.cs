@@ -7,4 +7,5 @@ public static class HrDbContext
     public static List<Employee> Employees { get; set; } = new List<Employee>();
     public static List<Department> Departments { get; set; } = new List<Department>();
     public static List<Company> Companies { get; set; } = new List<Company>();
+    public static List<Admin> Admins { get; set; } = new List<Admin>();
 }
