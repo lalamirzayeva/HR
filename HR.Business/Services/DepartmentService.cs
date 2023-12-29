@@ -33,41 +33,50 @@ public class DepartmentService : IDepartmentService
     }
     public void AddEmployee(int employeeId, int departmentId)  // bura ele etmek olar ki eger ishci harasa aiddise onda add edilmesin
     {
-        Employee? employee = 
+        Employee? employee =
             HrDbContext.Employees.Find(e => e.Id == employeeId);
-        if (employee is null) 
+        if (employee is null)
             throw new NotFoundException($"Employee with {employeeId} ID is not found.");
-        Department? dbDepartment = 
+        Department? dbDepartment =
             HrDbContext.Departments.Find(d => d.Id == departmentId);
-        if (dbDepartment is null) 
+        if (dbDepartment is null)
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
         if (dbDepartment is not null && dbDepartment.CurrentEmployeeCount >= dbDepartment.EmployeeLimit)
             throw new CapacityLimitException($"Employee can not be add to this department as department is already full.\n" +
                                                  $"Currently, the number of employees is: {dbDepartment.CurrentEmployeeCount}.");
-       employee.DepartmentId = dbDepartment;
-       dbDepartment.CurrentEmployeeCount++;        
+        foreach(var employees in HrDbContext.Employees)
+        {
+            if (employees.Id == employeeId && employee.DepartmentId is not null)
+                throw new AlreadyEmployeedException($"Employee with {employeeId} ID is already employed in {employee.DepartmentId.Name} department.");
+            if (employees.Id == employeeId && employee.DepartmentId is null)
+            {
+                employee.DepartmentId = dbDepartment;
+                dbDepartment.CurrentEmployeeCount++;
+            }
+        } 
     }
 
     public Department? GetDepartmentById(int departmentId)
     {
-        Department? dbDepartment = 
+        Department? dbDepartment =
             HrDbContext.Departments.Find(d => d.Id == departmentId);
-        if (dbDepartment is null) 
+        if (dbDepartment is null)
             throw new NotFoundException($"Department with {departmentId} ID does not exist.");
-        return dbDepartment; 
+        return dbDepartment;
     }
 
     public void GetDepartmentEmployees(string? departmentName)
     {
-        Department? dbDepartment = 
+        Department? dbDepartment =
             HrDbContext.Departments.Find(d => d.Name.ToLower() == departmentName.ToLower());
-        if (dbDepartment is null) 
+        if (dbDepartment is null)
             throw new NotFoundException($"Department with {departmentName} name is not found.");
-        if (dbDepartment is not null)
+        foreach (var employee in HrDbContext.Employees)
         {
-            foreach (var employee in HrDbContext.Employees)
+            if (employee.IsActive == true)
             {
-                if (employee.IsActive == true &&  employee.DepartmentId.Name.ToLower() == departmentName.ToLower())
+                if (employee.DepartmentId is null) continue;
+                if (dbDepartment.Id == employee.DepartmentId.Id)
                 {
                     Console.WriteLine($"Employee ID: {employee.Id};\n" +
                                       $"Employee name: {employee.Name};\n" +
@@ -86,7 +95,7 @@ public class DepartmentService : IDepartmentService
         if (String.IsNullOrEmpty(newDepartmentName)) throw new ArgumentNullException();
         Department? dbDepartment = GetDepartmentById(departmentId);
         if (dbDepartment is null) throw new NotFoundException($"Department with {departmentId} ID is not found.");
-        if (dbDepartment is not null) 
+        if (dbDepartment is not null)
         {
             foreach (var departments in HrDbContext.Departments)
             {
@@ -94,11 +103,11 @@ public class DepartmentService : IDepartmentService
                     throw new AlreadyExistException($"A department with {newDepartmentName} name exist within the company.");
             }
         }
-        if (newEmployeeLimit <= dbDepartment.CurrentEmployeeCount) 
+        if (newEmployeeLimit <= dbDepartment.CurrentEmployeeCount)
             throw new MinLimitEmployeeException($"New employee limit should be higher than current number of employees in order to update department.");
         dbDepartment.Name = newDepartmentName;
         dbDepartment.EmployeeLimit = newEmployeeLimit;
-    
+
     }
 
     public void ShowAllDepartments()
@@ -118,9 +127,9 @@ public class DepartmentService : IDepartmentService
 
     public void DeleteDepartment(int departmentId)
     {
-        Department? dbDepartment = 
+        Department? dbDepartment =
             HrDbContext.Departments.Find(d => d.Id == departmentId);
-        if (dbDepartment is null) 
+        if (dbDepartment is null)
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
         if (dbDepartment is not null)
         {
@@ -147,9 +156,9 @@ public class DepartmentService : IDepartmentService
 
     public void FireEmployee(int employeeId, int departmentId)
     {
-        Employee? dbEmployee = 
+        Employee? dbEmployee =
             HrDbContext.Employees.Find(e => e.Id == employeeId);
-        if(dbEmployee is null) 
+        if (dbEmployee is null)
             throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         Department? dbDepartment =
             HrDbContext.Departments.Find(d => d.Id == departmentId);
@@ -157,7 +166,7 @@ public class DepartmentService : IDepartmentService
             throw new NotFoundException($"Department with {departmentId} ID is not found.");
         if (dbEmployee is not null && dbDepartment is not null)
         {
-            if(dbEmployee.IsActive == true && dbDepartment.IsActive == true)
+            if (dbEmployee.IsActive == true && dbDepartment.IsActive == true)
             {
                 if (dbEmployee.DepartmentId.Id == departmentId)
                 {
@@ -169,7 +178,6 @@ public class DepartmentService : IDepartmentService
                     Console.WriteLine($"Employee with {employeeId} is not found within department.");
                 }
             }
-            
         }
     }
 }

@@ -10,7 +10,6 @@ public class Employee : IEntity
     public string? Surname { get; set; }
     public string? Email { get; set; }
     public int Salary { get; set; }
-    //public bool IsFired { get; set; }
     public bool IsActive { get; set; }
     public Department DepartmentId { get; set; }  
     public override string ToString()
