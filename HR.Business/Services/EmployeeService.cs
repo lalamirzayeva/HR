@@ -88,4 +88,17 @@ public class EmployeeService : IEmployeeService
             throw new MinWageException($"Salary amount can not be less than 345 manat according to the legislation.");
         employee.Salary = newSalaryAmount;
     }
+
+    public void ShowInactiveEmployees()
+    {
+        foreach(var employee in HrDbContext.Employees)
+        {
+            if(employee.IsActive is false)
+                Console.WriteLine($"Employee ID: {employee.Id}\n" +
+                                  $"Employee name: {employee.Name}\n" +
+                                  $"Employee surname: {employee.Surname}\n" +
+                                  $"Employee salary: {employee.Salary}\n" +
+                                  $"----------------------------------");
+        }
+    }
 }

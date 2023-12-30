@@ -8,5 +8,6 @@ public interface IEmployeeService
     void DowngradeEmployee(int employeeId, int newSalaryAmount);
     void ChangeDepartment(int employeeId, int newDepartmentId);
     void ShowAll();
+    void ShowInactiveEmployees();
     bool CheckExistence();
 }
