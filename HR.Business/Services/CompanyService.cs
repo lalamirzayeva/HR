@@ -32,7 +32,7 @@ public class CompanyService : ICompanyService
         {
             foreach (var department in HrDbContext.Departments)
             {
-                if (department.CompanyId.Name.ToLower() == companyName.ToLower())
+                if (department.CompanyId.Name.ToLower() == companyName.ToLower() && department.IsActive is true)
                     Console.WriteLine($"ID: {department.Id};  Department name: {department.Name}");
             }
         }

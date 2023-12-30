@@ -220,9 +220,15 @@ Start:
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 Console.WriteLine("Enter employee's ID:");
                                 Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                employeeService.ShowAll();
+                                Console.ResetColor();
                                 int employeeID = Convert.ToInt32(Console.ReadLine());
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 Console.WriteLine("Enter department's ID:");
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                departmentService.ShowAllDepartments();
                                 Console.ResetColor();
                                 int departmentID = Convert.ToInt32(Console.ReadLine());
                                 departmentService.AddEmployee(employeeID, departmentID);

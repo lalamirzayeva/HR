@@ -11,7 +11,6 @@ public class Department : IEntity
     public int EmployeeLimit { get; set; }
     public int CurrentEmployeeCount { get; set; }
     public bool IsActive { get; set; }
-    public bool IsDeleted { get; set; }
     public Company CompanyId { get; set; }
     public override string ToString()
     {
@@ -27,6 +26,5 @@ public class Department : IEntity
         EmployeeLimit = employeeLimit;
         CompanyId = companyId;
         IsActive = true;
-        IsDeleted = false;
     }
 }

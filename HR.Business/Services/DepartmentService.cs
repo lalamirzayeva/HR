@@ -68,7 +68,7 @@ public class DepartmentService : IDepartmentService
     public void GetDepartmentEmployees(string? departmentName)
     {
         Department? dbDepartment =
-            HrDbContext.Departments.Find(d => d.Name.ToLower() == departmentName.ToLower());
+            HrDbContext.Departments.Find(d => d.Name.ToLower() == departmentName.ToLower() && d.IsActive is true);
         if (dbDepartment is null)
             throw new NotFoundException($"Department with {departmentName} name is not found.");
         foreach (var employee in HrDbContext.Employees)
@@ -76,7 +76,7 @@ public class DepartmentService : IDepartmentService
             if (employee.IsActive == true)
             {
                 if (employee.DepartmentId is null) continue;
-                if (dbDepartment.Id == employee.DepartmentId.Id)
+                if (dbDepartment.Id == employee.DepartmentId.Id) 
                 {
                     Console.WriteLine($"Employee ID: {employee.Id};\n" +
                                       $"Employee name: {employee.Name};\n" +

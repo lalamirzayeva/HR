@@ -23,20 +23,25 @@ public class EmployeeService : IEmployeeService
 
     public void Active(int id)
     {
-        Employee? employee = HrDbContext.Employees.Find(e => e.Id == id);
-        if (employee is null) throw new NotFoundException($"Employee with {id} ID is not found.");
+        Employee? employee = 
+            HrDbContext.Employees.Find(e => e.Id == id);
+        if (employee is null) 
+            throw new NotFoundException($"Employee with {id} ID is not found.");
         employee.IsActive = true;
     }
     public void ChangeDepartment(int employeeId, int newDepartmentId)
     {
-        Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeId);
-        if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeId} ID is not found.");
-        Department? dbDepartment = HrDbContext.Departments.Find(d => d.Id == newDepartmentId);
-        if (dbDepartment is null) throw new NotFoundException($"Department with {newDepartmentId} ID is not found.");
+        Employee? dbEmployee = 
+            HrDbContext.Employees.Find(e => e.Id == employeeId);
+        if (dbEmployee is null) 
+            throw new NotFoundException($"Employee with {employeeId} ID is not found.");
+        Department? dbDepartment = 
+            HrDbContext.Departments.Find(d => d.Id == newDepartmentId && d.IsActive == true);
+        if (dbDepartment is null) 
+            throw new NotFoundException($"Department with {newDepartmentId} ID is not found.");
         dbEmployee.DepartmentId.CurrentEmployeeCount--;
         dbEmployee.DepartmentId = dbDepartment;
         dbDepartment.CurrentEmployeeCount++;
-        
     }
 
     public void ShowAll()
