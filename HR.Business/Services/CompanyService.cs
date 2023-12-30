@@ -13,7 +13,7 @@ public class CompanyService : ICompanyService
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
         Company? dbCompany = 
             HrDbContext.Companies.Find(c => c.Name.ToLower() == name.ToLower());
-        if (dbCompany is not null)
+        if (dbCompany is not null && dbCompany.IsActive == true)
             throw new AlreadyExistException($"A company with the {name} name is already exist.");
         if (name.Length < 2) 
             throw new CoNameException($"The company name should contain at least 3 letters.");
@@ -74,7 +74,10 @@ public class CompanyService : ICompanyService
        {
             if (company.IsActive == true)
             {
-                Console.WriteLine($"Company ID: {company.Id};  Company Name: {company.Name}");
+                Console.WriteLine($"Company ID: {company.Id}\n" +
+                                  $"Company name: {company.Name}\n" +
+                                  $"Company info: {company.Info}\n" +
+                                  $"****************************");
             }
         }
     }

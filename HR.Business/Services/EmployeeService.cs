@@ -49,7 +49,7 @@ public class EmployeeService : IEmployeeService
                                   $"Name: {employee.Name};\n" +
                                   $"Surname: {employee.Surname};\n" +
                                   $"Employee salary: {employee.Salary};\n" +
-                                  $"************************************");
+                                  $"----------------------------------");
             }
         }
     }
@@ -99,6 +99,32 @@ public class EmployeeService : IEmployeeService
                                   $"Employee surname: {employee.Surname}\n" +
                                   $"Employee salary: {employee.Salary}\n" +
                                   $"----------------------------------");
+        }
+    }
+
+    public bool CheckInactiveEmployees()
+    {
+        foreach (var employee in HrDbContext.Employees)
+        {
+            if (employee.IsActive is false)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ActivateInactive(int employeeID)
+    {
+        Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeID);
+        if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeID} ID is not found.");
+        foreach(var employee in HrDbContext.Employees)
+        {
+            if(employeeID == employee.Id)
+                employee.IsActive = true;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Employee with {employeeID} ID now is active.");
+            Console.ResetColor();
         }
     }
 }

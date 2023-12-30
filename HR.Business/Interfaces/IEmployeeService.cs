@@ -9,5 +9,7 @@ public interface IEmployeeService
     void ChangeDepartment(int employeeId, int newDepartmentId);
     void ShowAll();
     void ShowInactiveEmployees();
+    bool CheckInactiveEmployees();
+    void ActivateInactive(int employeeID);
     bool CheckExistence();
 }

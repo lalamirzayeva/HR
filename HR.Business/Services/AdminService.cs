@@ -85,7 +85,7 @@ public class AdminService : IAdminService
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"Don't have enough mony to order.\n" +
+                    Console.WriteLine($"Don't have enough money to order.\n" +
                                       $"Your current balance is {admin.CurrentBalance} manats.");
                     Console.ResetColor();
                 }

@@ -17,6 +17,8 @@ public enum MenuEnum
     DowngradeEmployee,
     ChangeEmployeeDepartment,
     FireEmployee,
+    ShowInactive,
+    Activate,
     ShowAllEmployees,
     CreateAdminProfile,
     EnterCanteen

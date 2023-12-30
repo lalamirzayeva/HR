@@ -14,7 +14,6 @@ EmployeeService employeeService = new();
 AdminService adminService = new();
 bool runApp = true;
 bool runCanteen = false;
-Menu:
 while (runApp)
 {
 Start:
@@ -39,10 +38,12 @@ Start:
                       "13 - Downgrade employee\n" +
                       "14 - Change employee's department\n" +
                       "15 - Fire employee\n" +
-                      "16 - Show all employees in the system\n" +
+                      "16 - Show all inactive employees in the system\n" +
+                      "17 - Activate inactive employee\n" +
+                      "18 - Show all active employees in the system\n" +
                       "-----------------------------------------\n" +
-                      "17 - Create HR admin profile\n" +
-                      "18 - Enter canteen\n" +
+                      "19 - Create HR admin profile\n" +
+                      "20 - Enter canteen\n" +
                       "-----------------------------------------\n" +
                       "0 - Exit");
     Console.ResetColor();
@@ -51,7 +52,7 @@ Start:
     bool isInt = int.TryParse(option, out optionNumber);
     if (isInt)
     {
-        if (optionNumber >= 0 && optionNumber <= 18)
+        if (optionNumber >= 0 && optionNumber <= 20)
         {
             switch (optionNumber)
             {
@@ -142,14 +143,14 @@ Start:
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
                         Console.ResetColor();
-                        goto case (int)MenuEnum.DeleteCompany;
+                        goto Start;
                     }
                     break;
                 case (int)MenuEnum.ShowAllCompanies:
                     var checkShowAllCo = companyService.CheckExistence();
                     if (checkShowAllCo is true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("All companies are listed below:");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -184,6 +185,9 @@ Start:
                             int employeeLimit = Convert.ToInt32(Console.ReadLine());
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter company ID to which this department will belong to:");
+                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            companyService.ShowAll();
                             Console.ResetColor();
                             int companyId = Convert.ToInt32(Console.ReadLine());
                             departmentService.Create(departmentName, departmentDesc, employeeLimit, companyId);
@@ -358,7 +362,7 @@ Start:
                     var checkShowDep = departmentService.CheckExistence();
                     if (checkShowDep is true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("All departments listed below:");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -541,12 +545,59 @@ Start:
                         goto case (int)MenuEnum.FireEmployee;
                     }
                     break;
+                case (int)MenuEnum.ShowInactive:
+                    var checkInactive = employeeService.CheckInactiveEmployees();
+                    if (checkInactive is true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("All inactive employees are listed below:");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        employeeService.ShowInactiveEmployees();
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("No inactive employee is found in the system to show.");
+                        Console.ResetColor();
+                        goto Start;
+                    }
+                    break;
+                case (int)MenuEnum.Activate:
+                    try
+                    {
+                        var checkInEmployee = employeeService.CheckInactiveEmployees();
+                        if (checkInEmployee is true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Enter ID of the employee you want to activate:");
+                            Console.ResetColor();
+                            int employeeID = Convert.ToInt32(Console.ReadLine());
+                            employeeService.ActivateInactive(employeeID);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine("No inactive employee is found in the system to activate.");
+                            Console.ResetColor();
+                            goto Start;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(ex.Message);
+                        Console.ResetColor();
+                        goto Start;
+                    }
+                    break;
                 case (int)MenuEnum.ShowAllEmployees:
                     var checkShowEmp = employeeService.CheckExistence();
                     if (checkShowEmp is true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.WriteLine("All employees are listed below:");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("All active employees are listed below:");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                         employeeService.ShowAll();
@@ -572,6 +623,9 @@ Start:
                         Console.ResetColor();
                         string? password = Console.ReadLine();
                         adminService.Create(username, password);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Profile is successfully created.");
+                        Console.ResetColor();
                     }
                     catch (Exception ex)
                     {
@@ -648,7 +702,7 @@ while (runCanteen)
                       "3 - Doner & ayran = 5 manats\n" +
                       "-----------------------------------------\n" +
                       "4 - Check your balance\n" +
-                      "0 - Back to main menu");
+                      "0 - Exit system");
     Console.ResetColor();
     string? option = Console.ReadLine();
     int optionNumber;
@@ -670,7 +724,7 @@ while (runCanteen)
                         Console.WriteLine("Enter your password:");
                         Console.ResetColor();
                         string? password = Console.ReadLine();
-                        adminService.Order(username,password,"Hamburger");
+                        adminService.Order(username, password, "Hamburger");
                     }
                     catch (Exception ex)
                     {
@@ -733,7 +787,7 @@ while (runCanteen)
                         Console.WriteLine("Enter your password:");
                         Console.ResetColor();
                         string? password = Console.ReadLine();
-                        adminService.CheckBalance(username,password);
+                        adminService.CheckBalance(username, password);
                     }
                     catch (Exception ex)
                     {
