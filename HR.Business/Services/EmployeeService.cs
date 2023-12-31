@@ -32,13 +32,15 @@ public class EmployeeService : IEmployeeService
     public void ChangeDepartment(int employeeId, int newDepartmentId)
     {
         Employee? dbEmployee = 
-            HrDbContext.Employees.Find(e => e.Id == employeeId);
+            HrDbContext.Employees.Find(e => e.Id == employeeId && e.IsActive is true);
         if (dbEmployee is null) 
             throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         Department? dbDepartment = 
             HrDbContext.Departments.Find(d => d.Id == newDepartmentId && d.IsActive == true);
         if (dbDepartment is null) 
             throw new NotFoundException($"Department with {newDepartmentId} ID is not found.");
+        if (dbDepartment.CurrentEmployeeCount >= dbDepartment.EmployeeLimit)
+            throw new CapacityLimitException($"Can not transfer as department with {dbDepartment.Id} ID is already full.");
         dbEmployee.DepartmentId.CurrentEmployeeCount--;
         dbEmployee.DepartmentId = dbDepartment;
         dbDepartment.CurrentEmployeeCount++;
@@ -73,7 +75,7 @@ public class EmployeeService : IEmployeeService
     public void UpgradeEmployee(int employeeId, int newSalaryAmount)
     {
         Employee? employee = 
-            HrDbContext.Employees.Find(e =>e.Id == employeeId);
+            HrDbContext.Employees.Find(e =>e.Id == employeeId && e.IsActive is true);
         if (employee is null) 
             throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         if (newSalaryAmount <= employee.Salary) 
@@ -84,7 +86,7 @@ public class EmployeeService : IEmployeeService
     public void DowngradeEmployee(int employeeId, int newSalaryAmount)
     {
         Employee? employee =
-            HrDbContext.Employees.Find(e => e.Id == employeeId);
+            HrDbContext.Employees.Find(e => e.Id == employeeId && e.IsActive is true);
         if (employee is null)
             throw new NotFoundException($"Employee with {employeeId} ID is not found.");
         if (newSalaryAmount >= employee.Salary)
@@ -121,15 +123,12 @@ public class EmployeeService : IEmployeeService
 
     public void ActivateInactive(int employeeID)
     {
-        Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeID);
+        Employee? dbEmployee = HrDbContext.Employees.Find(e => e.Id == employeeID && e.IsActive is false);
         if (dbEmployee is null) throw new NotFoundException($"Employee with {employeeID} ID is not found.");
         foreach(var employee in HrDbContext.Employees)
         {
             if(employeeID == employee.Id)
                 employee.IsActive = true;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Employee with {employeeID} ID now is active.");
-            Console.ResetColor();
         }
     }
 }

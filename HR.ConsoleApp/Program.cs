@@ -68,6 +68,9 @@ Start:
                         Console.ResetColor();
                         string? companyInfo = Console.ReadLine();
                         companyService.Create(companyName, companyInfo);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Successfully created.");
+                        Console.ResetColor();
                     }
                     catch (Exception ex)
                     {
@@ -125,10 +128,16 @@ Start:
                         if (checkDelCo is true)
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.WriteLine("Enter company's name:");
+                            Console.WriteLine("Enter company's name you want to delete:");
+                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            companyService.ShowAll();
                             Console.ResetColor();
                             string? companyName = Console.ReadLine();
                             companyService.Delete(companyName);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("The company has been deleted.");
+                            Console.ResetColor();
                         }
                         else
                         {
@@ -191,6 +200,9 @@ Start:
                             Console.ResetColor();
                             int companyId = Convert.ToInt32(Console.ReadLine());
                             departmentService.Create(departmentName, departmentDesc, employeeLimit, companyId);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Successfully created.");
+                            Console.ResetColor();
                         }
                         else
                         {
@@ -232,6 +244,9 @@ Start:
                                 Console.ResetColor();
                                 int departmentID = Convert.ToInt32(Console.ReadLine());
                                 departmentService.AddEmployee(employeeID, departmentID);
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Employee was added.");
+                                Console.ResetColor();
                             }
                             else
                             {
@@ -277,7 +292,7 @@ Start:
                             else
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("Currently, no employee is found in the system. Create an employee then add to the department. ");
+                                Console.WriteLine("Currently, no employee is found in the system. Create an employee then add to the department.");
                                 Console.ResetColor();
                                 goto case (int)MenuEnum.CreateEmployee;
                             }
@@ -295,7 +310,7 @@ Start:
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(ex.Message);
                         Console.ResetColor();
-                        goto Start;
+                        goto case (int)MenuEnum.ShowEmployeesOfDepartment;
                     }
                     break;
                 case (int)MenuEnum.UpdateDepartment:
@@ -305,7 +320,10 @@ Start:
                         if (checkDep is true)
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.WriteLine("Enter department ID you want to change:");
+                            Console.WriteLine("Enter department's ID you want to change:");
+                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            departmentService.ShowAllDepartments();
                             Console.ResetColor();
                             int departmentId = Convert.ToInt32(Console.ReadLine());
                             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -317,13 +335,16 @@ Start:
                             Console.ResetColor();
                             int newEmployeeLimit = Convert.ToInt32(Console.ReadLine());
                             departmentService.UpdateDepartment(departmentId, newName, newEmployeeLimit);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Department was updated");
+                            Console.ResetColor();
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.WriteLine("No department is found in the system to update.");
+                            Console.WriteLine("No department is found in the system to update. Firstly, create department.");
                             Console.ResetColor();
-                            goto Start;
+                            goto case (int)MenuEnum.CreateDepartment;
                         }
                     }
                     catch (Exception ex)
@@ -343,8 +364,14 @@ Start:
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter department ID you want to delete:");
                             Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            departmentService.ShowAllDepartments();
+                            Console.ResetColor();
                             int departmentId = Convert.ToInt32(Console.ReadLine());
                             departmentService.DeleteDepartment(departmentId);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Department was deleted.");
+                            Console.ResetColor();
                         }
                         else
                         {
@@ -354,7 +381,6 @@ Start:
                             Console.ResetColor();
                             goto Start;
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -403,6 +429,9 @@ Start:
                         Console.ResetColor();
                         int employeeSalary = Convert.ToInt32(Console.ReadLine());
                         employeeService.Create(employeeName, employeeSurname, employeeMail, employeeSalary);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Employee was created.");
+                        Console.ResetColor();
                     }
                     catch (Exception ex)
                     {
@@ -421,12 +450,18 @@ Start:
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter ID of the employee you want to upgrade:");
                             Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            employeeService.ShowAll();
+                            Console.ResetColor();
                             int employeeID = Convert.ToInt32(Console.ReadLine());
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter new salary amount:");
                             Console.ResetColor();
                             int newSalaryAmount = Convert.ToInt32(Console.ReadLine());
                             employeeService.UpgradeEmployee(employeeID, newSalaryAmount);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Employee was upgraded.");
+                            Console.ResetColor();
                         }
                         else
                         {
@@ -453,12 +488,18 @@ Start:
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter ID of the employee you want to downgrade:");
                             Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            employeeService.ShowAll();
+                            Console.ResetColor();
                             int employeeID = Convert.ToInt32(Console.ReadLine());
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter new salary amount:");
                             Console.ResetColor();
                             int newSalaryAmount = Convert.ToInt32(Console.ReadLine());
                             employeeService.DowngradeEmployee(employeeID, newSalaryAmount);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Employee was downgraded.");
+                            Console.ResetColor();
                         }
                         else
                         {
@@ -486,14 +527,23 @@ Start:
                             if (checkChange is true)
                             {
                                 Console.ForegroundColor = ConsoleColor.Magenta;
-                                Console.WriteLine("Enter employee ID:");
+                                Console.WriteLine("Enter employee ID to transfer:");
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                employeeService.ShowAll();
                                 Console.ResetColor();
                                 int employeeId = Convert.ToInt32(Console.ReadLine());
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 Console.WriteLine("Enter new department's ID to transfer employee:");
                                 Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                departmentService.ShowAllDepartments();
+                                Console.ResetColor();
                                 int newDepartmentId = Convert.ToInt32(Console.ReadLine());
                                 employeeService.ChangeDepartment(employeeId, newDepartmentId);
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Employee was transferred.");
+                                Console.ResetColor();
                             }
                             else
                             {
@@ -525,22 +575,42 @@ Start:
                         var checkEmp = employeeService.CheckExistence();
                         if (checkEmp is true)
                         {
-                            Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.WriteLine("Enter ID of the employee you want to fire:");
-                            Console.ResetColor();
-                            int employeeID = Convert.ToInt32(Console.ReadLine());
-                            Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.WriteLine("Enter ID of the department this employee works:");
-                            Console.ResetColor();
-                            int departmentId = Convert.ToInt32(Console.ReadLine());
-                            departmentService.FireEmployee(employeeID, departmentId);
+                            var checkDepEmp = departmentService.CheckExistence();
+                            if (checkDepEmp is true)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine("Enter ID of the employee you want to fire:");
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                employeeService.ShowAll();
+                                Console.ResetColor();
+                                int employeeID = Convert.ToInt32(Console.ReadLine());
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine("Enter ID of the department this employee works:");
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                departmentService.ShowAllDepartments();
+                                Console.ResetColor();
+                                int departmentId = Convert.ToInt32(Console.ReadLine());
+                                departmentService.FireEmployee(employeeID, departmentId);
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Employee has been fired.");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("No department is found in the system where employee could be hired. Create department.");
+                                Console.ResetColor();
+                                goto case (int)MenuEnum.CreateDepartment;
+                            }                            
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.WriteLine("No employee is found in the system to fire.");
+                            Console.WriteLine("No employee is found in the system to fire. Firstly, create an employee.");
                             Console.ResetColor();
-                            goto Start;
+                            goto case (int)MenuEnum.CreateEmployee;
                         }
                     }
                     catch (Exception ex)
@@ -555,10 +625,10 @@ Start:
                     var checkInactive = employeeService.CheckInactiveEmployees();
                     if (checkInactive is true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("All inactive employees are listed below:");
                         Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         employeeService.ShowInactiveEmployees();
                         Console.ResetColor();
                     }
@@ -579,8 +649,14 @@ Start:
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine("Enter ID of the employee you want to activate:");
                             Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            employeeService.ShowInactiveEmployees();
+                            Console.ResetColor();
                             int employeeID = Convert.ToInt32(Console.ReadLine());
                             employeeService.ActivateInactive(employeeID);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Employee now is active.");
+                            Console.ResetColor();
                         }
                         else
                         {

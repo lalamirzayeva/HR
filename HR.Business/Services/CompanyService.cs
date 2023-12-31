@@ -12,8 +12,8 @@ public class CompanyService : ICompanyService
     {
         if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
         Company? dbCompany = 
-            HrDbContext.Companies.Find(c => c.Name.ToLower() == name.ToLower());
-        if (dbCompany is not null && dbCompany.IsActive == true)
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == name.ToLower() && c.IsActive is true);
+        if (dbCompany is not null)
             throw new AlreadyExistException($"A company with the {name} name is already exist.");
         if (name.Length < 2) 
             throw new CoNameException($"The company name should contain at least 3 letters.");
@@ -25,7 +25,7 @@ public class CompanyService : ICompanyService
     {
         if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
         var dbCompany =
-            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower() && c.IsActive is true);
         if (dbCompany is null)
             throw new AlreadyExistException($"A company with {companyName} name does not exist.");
         if (dbCompany is not null)
@@ -57,13 +57,13 @@ public class CompanyService : ICompanyService
             throw new NotFoundException($"A company with {companyName} name is not found.");
         dbCompany.IsActive = true;
     }
-    public Company? FindCompanyById(int companyId)   //burda eledi ki, shirket silinse de ora dep add edilir
+    public Company? FindCompanyById(int companyId)  
     {
         foreach (var companies in HrDbContext.Companies)
         {
             if (companies.IsActive == true)
             { 
-                return HrDbContext.Companies.Find(c => c.Id == companyId); 
+                return HrDbContext.Companies.Find(c => c.Id == companyId && c.IsActive is true); 
             }
         }
         return null;
@@ -98,7 +98,7 @@ public class CompanyService : ICompanyService
     {
         if (string.IsNullOrEmpty(companyName)) throw new ArgumentNullException();
         Company? dbCompany =
-            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower());
+            HrDbContext.Companies.Find(c => c.Name.ToLower() == companyName.ToLower() && c.IsActive is true);
         if (dbCompany is null)
             throw new NotFoundException($"A company with {companyName} name is not found.");
         if (dbCompany is not null)
